@@ -119,9 +119,9 @@ public class Game
     {
         ArrayList<Card> cards = new ArrayList<>();
 
-        cards.add(new Card("Rock", loadImage("C:/Users/Erik Edman/JAVA24/AdvJava/Images/Rock.jpg"), 0));
-        cards.add(new Card("Paper", loadImage("C:/Users/Erik Edman/JAVA24/AdvJava/Images/Paper.jpg"), 1));
-        cards.add(new Card("Scissor", loadImage("C:/Users/Erik Edman/JAVA24/AdvJava/Images/Scissor.jpg"), 2));
+        cards.add(new Card("Rock", loadImage("images/Rock.jpg"), 0));
+        cards.add(new Card("Paper", loadImage("images/Paper.jpg"), 1));
+        cards.add(new Card("Scissor", loadImage("images/Scissor.jpg"), 2));
 
         return cards;
     }
