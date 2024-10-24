@@ -41,8 +41,8 @@ public class Game
         root.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
         root.setPrefSize(WIDTH, HEIGHT);
 
-        playerRockNr = playerPaperNr = playerScissorNr = 3;
-        computerRockNr = computerPaperNr = computerScissorNr = 3;
+        playerRockNr = playerPaperNr = playerScissorNr = 2;
+        computerRockNr = computerPaperNr = computerScissorNr = 2;
 
         playerRock = new Label();
         playerRock.setText(playerRockNr + "");
@@ -113,6 +113,7 @@ public class Game
         root.getChildren().add(computerLivesLabel);
 
         initCards();
+
     }
 
     private ArrayList<Card> createCards() throws IOException
