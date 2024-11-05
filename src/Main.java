@@ -41,26 +41,10 @@ public class Main extends Application
                         String cardType = card.getType();
                         Boolean canPick = false;
 
-                        switch(cardType)
+
+                        if(card.getRemainingUses() > 0)
                         {
-                            case "Rock":
-                                if(game.getPlayerRockNr() > 0)
-                                {
-                                    canPick = true;
-                                }
-                                break;
-                            case "Paper":
-                                if(game.getPlayerPaperNr() > 0)
-                                {
-                                    canPick = true;
-                                }
-                                break;
-                            case "Scissor":
-                                if(game.getPlayerScissorNr() > 0)
-                                {
-                                    canPick = true;
-                                }
-                                break;
+                            canPick = true;
                         }
 
                         if(canPick)

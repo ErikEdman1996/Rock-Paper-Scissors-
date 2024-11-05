@@ -5,22 +5,19 @@ import javafx.scene.input.MouseEvent;
 
 public class Card
 {
-    private Image image;
     private ImageView imageView;
     private String type;
     private int index;
-    private Boolean picked;
-    private Boolean visible;
-    private Boolean used;
+    private boolean picked;
+    private int remainingUses;
 
-    public Card(String type, Image image, int index)
+    public Card(String type, Image image, int index, int remainingUses)
     {
         this.type = type;
-        this.image = image;
         this.picked = false;
-        this.visible = true;
-        this.used = false;
         this.index = index;
+        this.remainingUses = remainingUses;
+
         imageView = new ImageView(image);
         imageView.setFitWidth(200);
         imageView.setPreserveRatio(true);
@@ -30,19 +27,7 @@ public class Card
     public void reset()
     {
         picked = false;
-        visible = true;
-        used = false;
         imageView.setVisible(true);
-    }
-
-    public Boolean isUsed()
-    {
-        return used;
-    }
-
-    public void setUsed(Boolean used)
-    {
-        this.used = used;
     }
 
     public void setPos(double x, double y)
@@ -66,18 +51,13 @@ public class Card
         return imageView;
     }
 
-    public Boolean isVisible()
-    {
-        return visible;
-    }
 
     public void setVisible(Boolean visible)
     {
-        this.visible = visible;
         this.imageView.setVisible(visible);
     }
 
-    public Boolean isPicked()
+    public boolean isPicked()
     {
         return picked;
     }
@@ -85,5 +65,15 @@ public class Card
     public void setPicked(Boolean picked)
     {
         this.picked = picked;
+    }
+
+    public int getRemainingUses()
+    {
+        return remainingUses;
+    }
+
+    public void setRemainingUses(int remainingUses)
+    {
+        this.remainingUses = remainingUses;
     }
 }
