@@ -17,23 +17,32 @@ import java.util.Random;
 
 public class Game
 {
-    private Boolean gameInProgress;
-    private Boolean playerClick, computerPick;
+    private boolean gameInProgress;
+    private boolean playerClick, computerPick;
+
     private List<Card> playerCards;
     private List<Card> computerCards;
+
     private AnchorPane root;
-    private Label playerRock, playerPaper, playerScissor, playerLivesLabel;
-    private Label computerRock, computerPaper, computerScissor, computerLivesLabel;
-    private int playerRockNr, playerPaperNr, playerScissorNr;
-    private int computerRockNr, computerPaperNr, computerScissorNr;
+
+    private Label playerRockLabel, playerPaperLabel, playerScissorLabel, playerLivesLabel;
+    private Label computerRockLabel, computerPaperLabel, computerScissorLabel, computerLivesLabel;
 
     private int playerLives;
     private int computerLives;
 
     private List<String> playerMoveHistory;
 
-    private final int WIDTH = 600;
-    private final int HEIGHT = 700;
+    private static final int WIDTH = 600;
+    private static final int HEIGHT = 700;
+    private static final int PLAYER_LABEL_X = 100;
+    private static final int PLAYER_LABEL_Y = 480;
+    private static final int COMPUTER_LABEL_X = 100;
+    private static final int COMPUTER_LABEL_Y = 300;
+
+    private static final int ROCK_INDEX = 0;
+    private static final int PAPER_INDEX = 1;
+    private static final int SCISSOR_INDEX = 2;
 
     public Game() throws IOException
     {
@@ -41,59 +50,8 @@ public class Game
         root.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
         root.setPrefSize(WIDTH, HEIGHT);
 
-        playerRockNr = playerPaperNr = playerScissorNr = 2;
-        computerRockNr = computerPaperNr = computerScissorNr = 2;
-
-        playerRock = new Label();
-        playerRock.setText(playerRockNr + "");
-        playerPaper = new Label();
-        playerPaper.setText(playerPaperNr + "");
-        playerScissor = new Label();
-        playerScissor.setText(playerScissorNr + "");
-
-        computerRock = new Label();
-        computerRock.setText(computerRockNr + "");
-        computerPaper = new Label();
-        computerPaper.setText(computerPaperNr + "");
-        computerScissor = new Label();
-        computerScissor.setText(computerScissorNr + "");
-
-        playerRock.setLayoutX(100 + playerRock.getLayoutBounds().getMinX());
-        playerRock.setLayoutY(480);
-        playerRock.setTextFill(Color.WHITE);
-        playerPaper.setLayoutX(310 + playerPaper.getLayoutBounds().getMinX());
-        playerPaper.setLayoutY(480);
-        playerPaper.setTextFill(Color.WHITE);
-        playerScissor.setLayoutX(520 + playerScissor.getLayoutBounds().getMinX());
-        playerScissor.setLayoutY(480);
-        playerScissor.setTextFill(Color.WHITE);
-
-        computerRock.setLayoutX(100 + computerRock.getLayoutBounds().getMinX());
-        computerRock.setLayoutY(300);
-        computerRock.setTextFill(Color.WHITE);
-        computerPaper.setLayoutX(310 + computerPaper.getLayoutBounds().getMinX());
-        computerPaper.setLayoutY(300);
-        computerPaper.setTextFill(Color.WHITE);
-        computerScissor.setLayoutX(520 + computerScissor.getLayoutBounds().getMinX());
-        computerScissor.setLayoutY(300);
-        computerScissor.setTextFill(Color.WHITE);
-
         playerLives = 3;
         computerLives = 3;
-
-        playerLivesLabel = new Label();
-        playerLivesLabel.setText("Player: "+playerLives);
-        playerLivesLabel.setTextFill(Color.WHITE);
-
-        playerLivesLabel.setLayoutX(200 - playerLivesLabel.getLayoutBounds().getWidth() / 2);
-        playerLivesLabel.setLayoutY(400);
-
-        computerLivesLabel = new Label();
-        computerLivesLabel.setText("Computer: "+computerLives);
-        computerLivesLabel.setTextFill(Color.WHITE);
-
-        computerLivesLabel.setLayoutX(400 - computerLivesLabel.getLayoutBounds().getWidth() / 2);
-        computerLivesLabel.setLayoutY(400);
 
         playerClick = false;
         gameInProgress = true;
@@ -103,26 +61,85 @@ public class Game
         playerCards = createCards();
         computerCards = createCards();
 
-        root.getChildren().add(playerRock);
-        root.getChildren().add(playerPaper);
-        root.getChildren().add(playerScissor);
-        root.getChildren().add(computerRock);
-        root.getChildren().add(computerPaper);
-        root.getChildren().add(computerScissor);
+        initCards();
+        initPlayerLabels();
+        initComputerLabels();
+
+        root.getChildren().add(playerRockLabel);
+        root.getChildren().add(playerPaperLabel);
+        root.getChildren().add(playerScissorLabel);
+        root.getChildren().add(computerRockLabel);
+        root.getChildren().add(computerPaperLabel);
+        root.getChildren().add(computerScissorLabel);
         root.getChildren().add(playerLivesLabel);
         root.getChildren().add(computerLivesLabel);
 
-        initCards();
 
+
+    }
+
+    private void initPlayerLabels()
+    {
+        playerRockLabel = new Label();
+        playerRockLabel.setText(String.valueOf(playerCards.get(ROCK_INDEX).getRemainingUses()));
+        playerPaperLabel = new Label();
+        playerPaperLabel.setText(String.valueOf(playerCards.get(PAPER_INDEX).getRemainingUses()));
+        playerScissorLabel = new Label();
+        playerScissorLabel.setText(String.valueOf(playerCards.get(SCISSOR_INDEX).getRemainingUses()));
+
+        playerRockLabel.setLayoutX(PLAYER_LABEL_X + playerRockLabel.getLayoutBounds().getMinX());
+        playerRockLabel.setLayoutY(PLAYER_LABEL_Y);
+        playerRockLabel.setTextFill(Color.WHITE);
+        playerPaperLabel.setLayoutX((PLAYER_LABEL_X * 3 + 10) + playerPaperLabel.getLayoutBounds().getMinX());
+        playerPaperLabel.setLayoutY(PLAYER_LABEL_Y);
+        playerPaperLabel.setTextFill(Color.WHITE);
+        playerScissorLabel.setLayoutX((PLAYER_LABEL_X* 5 + 20) + playerScissorLabel.getLayoutBounds().getMinX());
+        playerScissorLabel.setLayoutY(PLAYER_LABEL_Y);
+        playerScissorLabel.setTextFill(Color.WHITE);
+
+        playerLivesLabel = new Label();
+        playerLivesLabel.setText("Player: "+playerLives);
+        playerLivesLabel.setTextFill(Color.WHITE);
+
+        playerLivesLabel.setLayoutX(200 - playerLivesLabel.getLayoutBounds().getWidth() / 2);
+        playerLivesLabel.setLayoutY(400);
+
+    }
+
+    private void initComputerLabels()
+    {
+        computerRockLabel = new Label();
+        computerRockLabel.setText(String.valueOf(computerCards.get(ROCK_INDEX).getRemainingUses()));
+        computerPaperLabel = new Label();
+        computerPaperLabel.setText(String.valueOf(computerCards.get(PAPER_INDEX).getRemainingUses()));
+        computerScissorLabel = new Label();
+        computerScissorLabel.setText(String.valueOf(computerCards.get(SCISSOR_INDEX).getRemainingUses()));
+
+        computerRockLabel.setLayoutX(COMPUTER_LABEL_X + computerRockLabel.getLayoutBounds().getMinX());
+        computerRockLabel.setLayoutY(COMPUTER_LABEL_Y);
+        computerRockLabel.setTextFill(Color.WHITE);
+        computerPaperLabel.setLayoutX((COMPUTER_LABEL_X * 3 + 10) + computerPaperLabel.getLayoutBounds().getMinX());
+        computerPaperLabel.setLayoutY(COMPUTER_LABEL_Y);
+        computerPaperLabel.setTextFill(Color.WHITE);
+        computerScissorLabel.setLayoutX((COMPUTER_LABEL_X * 5 + 20) + computerScissorLabel.getLayoutBounds().getMinX());
+        computerScissorLabel.setLayoutY(COMPUTER_LABEL_Y);
+        computerScissorLabel.setTextFill(Color.WHITE);
+
+        computerLivesLabel = new Label();
+        computerLivesLabel.setText("Computer: "+computerLives);
+        computerLivesLabel.setTextFill(Color.WHITE);
+
+        computerLivesLabel.setLayoutX(400 - computerLivesLabel.getLayoutBounds().getWidth() / 2);
+        computerLivesLabel.setLayoutY(400);
     }
 
     private ArrayList<Card> createCards() throws IOException
     {
         ArrayList<Card> cards = new ArrayList<>();
 
-        cards.add(new Card("Rock", loadImage("images/Rock.jpg"), 0));
-        cards.add(new Card("Paper", loadImage("images/Paper.jpg"), 1));
-        cards.add(new Card("Scissor", loadImage("images/Scissor.jpg"), 2));
+        cards.add(new Card("Rock", loadImage("images/Rock.jpg"), ROCK_INDEX, 3));
+        cards.add(new Card("Paper", loadImage("images/Paper.jpg"), PAPER_INDEX, 3));
+        cards.add(new Card("Scissor", loadImage("images/Scissor.jpg"), SCISSOR_INDEX, 3));
 
         return cards;
     }
@@ -150,53 +167,17 @@ public class Game
 
         for(Card card: playerCards)
         {
-            String type = card.getType();
-
-            switch(type)
+            if(card.getRemainingUses() <= 0)
             {
-                case "Rock":
-                    if(playerRockNr <= 0)
-                    {
-                        card.setVisible(false);
-                    }
-                    break;
-                case "Paper":
-                    if(playerPaperNr <= 0)
-                    {
-                        card.setVisible(false);
-                    }
-                    break;
-                case "Scissor":
-                    if(playerScissorNr <= 0)
-                    {
-                        card.setVisible(false);
-                    }
+                card.setVisible(false);
             }
         }
 
         for(Card card: computerCards)
         {
-            String type = card.getType();
-
-            switch(type)
+            if(card.getRemainingUses() <= 0)
             {
-                case "Rock":
-                    if(computerRockNr <= 0)
-                    {
-                        card.setVisible(false);
-                    }
-                    break;
-                case "Paper":
-                    if(computerPaperNr <= 0)
-                    {
-                        card.setVisible(false);
-                    }
-                    break;
-                case "Scissor":
-                    if(computerScissorNr <= 0)
-                    {
-                        card.setVisible(false);
-                    }
+                card.setVisible(false);
             }
         }
 
@@ -222,6 +203,7 @@ public class Game
             {
                 playerClick = true;
                 playerCardIndex = card.getIndex();
+                card.setRemainingUses(card.getRemainingUses() - 1);
                 break;
             }
         }
@@ -234,26 +216,11 @@ public class Game
             {
                 if(card.getType().equals(computerMove))
                 {
-                    switch(computerMove)
+                    if(card.getRemainingUses() > 0)
                     {
-                        case "Rock":
-                            if(computerRockNr > 0)
-                            {
-                                computerCardIndex = card.getIndex();
-                            }
-                            break;
-                        case "Paper":
-                            if(computerPaperNr > 0)
-                            {
-                                computerCardIndex = card.getIndex();
-                            }
-                            break;
-                        case "Scissor":
-                            if(computerScissorNr > 0)
-                            {
-                                computerCardIndex = card.getIndex();
-                            }
-                            break;
+                        computerCardIndex = card.getIndex();
+                        card.setRemainingUses(card.getRemainingUses() - 1);
+                        break;
                     }
                 }
             }
@@ -285,71 +252,22 @@ public class Game
             pause.setOnFinished(event -> {
 
                 //Step 3. Check if any cards should be hidden
-                if(playerRockNr <= 0)
+                for(Card card : playerCards)
                 {
-                    for(Card card : playerCards)
+                    if(card.getRemainingUses() <= 0)
                     {
-                        if(card.getType().equals("Rock"))
-                        {
-                            card.setVisible(false); // Hide the card when player has 0 Rock cards left
-                        }
+                        card.setVisible(false);
                     }
                 }
 
-                if(playerPaperNr <= 0)
+                for(Card card : computerCards)
                 {
-                    for(Card card : playerCards)
+                    if(card.getRemainingUses() <= 0)
                     {
-                        if(card.getType().equals("Paper"))
-                        {
-                            card.setVisible(false); // Hide the card when player has 0 Paper cards left
-                        }
+                        card.setVisible(false);
                     }
                 }
 
-                if(playerScissorNr <= 0)
-                {
-                    for(Card card : playerCards)
-                    {
-                        if(card.getType().equals("Scissor"))
-                        {
-                            card.setVisible(false); // Hide the card when player has 0 Scissor cards left
-                        }
-                    }
-                }
-
-                if(computerRockNr <= 0)
-                {
-                    for(Card card : computerCards)
-                    {
-                        if(card.getType().equals("Rock"))
-                        {
-                            card.setVisible(false); // Hide the card when computer has 0 Rock cards left
-                        }
-                    }
-                }
-
-                if(computerPaperNr <= 0)
-                {
-                    for(Card card : computerCards)
-                    {
-                        if(card.getType().equals("Paper"))
-                        {
-                            card.setVisible(false); // Hide the card when computer has 0 Paper cards left
-                        }
-                    }
-                }
-
-                if(computerScissorNr <= 0)
-                {
-                    for(Card card : computerCards)
-                    {
-                        if(card.getType().equals("Scissor"))
-                        {
-                            card.setVisible(false); // Hide the card when computer has 0 Scissor cards left
-                        }
-                    }
-                }
                 //Step 4. Reset the game state after the delay
                 reset();
             });
@@ -360,13 +278,13 @@ public class Game
             gameInProgress = false;
         }
 
-        playerRock.setText(playerRockNr + "");
-        playerPaper.setText(playerPaperNr + "");
-        playerScissor.setText(playerScissorNr + "");
+        playerRockLabel.setText(String.valueOf(playerCards.get(ROCK_INDEX).getRemainingUses()));
+        playerPaperLabel.setText(String.valueOf(playerCards.get(PAPER_INDEX).getRemainingUses()));
+        playerScissorLabel.setText(String.valueOf(playerCards.get(SCISSOR_INDEX).getRemainingUses()));
 
-        computerRock.setText(computerRockNr + "");
-        computerPaper.setText(computerPaperNr + "");
-        computerScissor.setText(computerScissorNr + "");
+        computerRockLabel.setText(String.valueOf(computerCards.get(ROCK_INDEX).getRemainingUses()));
+        computerPaperLabel.setText(String.valueOf(computerCards.get(PAPER_INDEX).getRemainingUses()));
+        computerScissorLabel.setText(String.valueOf(computerCards.get(SCISSOR_INDEX).getRemainingUses()));
 
         playerLivesLabel.setText("Player: "+playerLives);
         computerLivesLabel.setText("Computer: "+computerLives);
@@ -407,54 +325,33 @@ public class Game
         switch(playerType)
         {
             case "Rock":
-                playerRockNr--;
                 if(computerType.equals("Scissor"))
                 {
-                    computerScissorNr--;
                     computerLives--;
                 }
                 else if(computerType.equals("Paper"))
                 {
-                    computerPaperNr--;
                     playerLives--;
-                }
-                else
-                {
-                    computerRockNr--;
                 }
                 break;
             case "Paper":
-                playerPaperNr--;
                 if(computerType.equals("Rock"))
                 {
-                    computerRockNr--;
                     computerLives--;
                 }
                 else if(computerType.equals("Scissor"))
                 {
-                    computerScissorNr--;
                     playerLives--;
-                }
-                else
-                {
-                    computerPaperNr--;
                 }
                 break;
             case "Scissor":
-                playerScissorNr--;
                 if(computerType.equals("Paper"))
                 {
-                    computerPaperNr--;
                     computerLives--;
                 }
                 else if(computerType.equals("Rock"))
                 {
-                    computerRockNr--;
                     playerLives--;
-                }
-                else
-                {
-                    computerScissorNr--;
                 }
                 break;
         }
@@ -558,18 +455,6 @@ public class Game
         {
             return "Scissor";
         }
-    }
-
-    public int getPlayerRockNr() {
-        return playerRockNr;
-    }
-
-    public int getPlayerPaperNr() {
-        return playerPaperNr;
-    }
-
-    public int getPlayerScissorNr() {
-        return playerScissorNr;
     }
 }
 
