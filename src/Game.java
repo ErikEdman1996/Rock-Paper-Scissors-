@@ -19,11 +19,15 @@ public class Game
 {
     private Boolean gameInProgress;
     private Boolean playerClick, computerPick;
+
     private List<Card> playerCards;
     private List<Card> computerCards;
+
     private AnchorPane root;
-    private Label playerRock, playerPaper, playerScissor, playerLivesLabel;
-    private Label computerRock, computerPaper, computerScissor, computerLivesLabel;
+
+    private Label playerRockLabel, playerPaperLabel, playerScissorLabel, playerLivesLabel;
+    private Label computerRockLabel, computerPaperLabel, computerScissorLabel, computerLivesLabel;
+
     private int playerRockNr, playerPaperNr, playerScissorNr;
     private int computerRockNr, computerPaperNr, computerScissorNr;
 
@@ -32,8 +36,12 @@ public class Game
 
     private List<String> playerMoveHistory;
 
-    private final int WIDTH = 600;
-    private final int HEIGHT = 700;
+    private static final int WIDTH = 600;
+    private static final int HEIGHT = 700;
+    private static final int PLAYER_LABEL_X = 100;
+    private static final int PLAYER_LABEL_Y = 480;
+    private static final int COMPUTER_LABEL_X = 100;
+    private static final int COMPUTER_LABEL_Y = 300;
 
     public Game() throws IOException
     {
@@ -41,59 +49,11 @@ public class Game
         root.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
         root.setPrefSize(WIDTH, HEIGHT);
 
-        playerRockNr = playerPaperNr = playerScissorNr = 2;
-        computerRockNr = computerPaperNr = computerScissorNr = 2;
-
-        playerRock = new Label();
-        playerRock.setText(playerRockNr + "");
-        playerPaper = new Label();
-        playerPaper.setText(playerPaperNr + "");
-        playerScissor = new Label();
-        playerScissor.setText(playerScissorNr + "");
-
-        computerRock = new Label();
-        computerRock.setText(computerRockNr + "");
-        computerPaper = new Label();
-        computerPaper.setText(computerPaperNr + "");
-        computerScissor = new Label();
-        computerScissor.setText(computerScissorNr + "");
-
-        playerRock.setLayoutX(100 + playerRock.getLayoutBounds().getMinX());
-        playerRock.setLayoutY(480);
-        playerRock.setTextFill(Color.WHITE);
-        playerPaper.setLayoutX(310 + playerPaper.getLayoutBounds().getMinX());
-        playerPaper.setLayoutY(480);
-        playerPaper.setTextFill(Color.WHITE);
-        playerScissor.setLayoutX(520 + playerScissor.getLayoutBounds().getMinX());
-        playerScissor.setLayoutY(480);
-        playerScissor.setTextFill(Color.WHITE);
-
-        computerRock.setLayoutX(100 + computerRock.getLayoutBounds().getMinX());
-        computerRock.setLayoutY(300);
-        computerRock.setTextFill(Color.WHITE);
-        computerPaper.setLayoutX(310 + computerPaper.getLayoutBounds().getMinX());
-        computerPaper.setLayoutY(300);
-        computerPaper.setTextFill(Color.WHITE);
-        computerScissor.setLayoutX(520 + computerScissor.getLayoutBounds().getMinX());
-        computerScissor.setLayoutY(300);
-        computerScissor.setTextFill(Color.WHITE);
+        playerRockNr = playerPaperNr = playerScissorNr = 3;
+        computerRockNr = computerPaperNr = computerScissorNr = 3;
 
         playerLives = 3;
         computerLives = 3;
-
-        playerLivesLabel = new Label();
-        playerLivesLabel.setText("Player: "+playerLives);
-        playerLivesLabel.setTextFill(Color.WHITE);
-
-        playerLivesLabel.setLayoutX(200 - playerLivesLabel.getLayoutBounds().getWidth() / 2);
-        playerLivesLabel.setLayoutY(400);
-
-        computerLivesLabel = new Label();
-        computerLivesLabel.setText("Computer: "+computerLives);
-        computerLivesLabel.setTextFill(Color.WHITE);
-
-        computerLivesLabel.setLayoutX(400 - computerLivesLabel.getLayoutBounds().getWidth() / 2);
-        computerLivesLabel.setLayoutY(400);
 
         playerClick = false;
         gameInProgress = true;
@@ -103,17 +63,75 @@ public class Game
         playerCards = createCards();
         computerCards = createCards();
 
-        root.getChildren().add(playerRock);
-        root.getChildren().add(playerPaper);
-        root.getChildren().add(playerScissor);
-        root.getChildren().add(computerRock);
-        root.getChildren().add(computerPaper);
-        root.getChildren().add(computerScissor);
+        initPlayerLabels();
+        initComputerLabels();
+
+        root.getChildren().add(playerRockLabel);
+        root.getChildren().add(playerPaperLabel);
+        root.getChildren().add(playerScissorLabel);
+        root.getChildren().add(computerRockLabel);
+        root.getChildren().add(computerPaperLabel);
+        root.getChildren().add(computerScissorLabel);
         root.getChildren().add(playerLivesLabel);
         root.getChildren().add(computerLivesLabel);
 
         initCards();
 
+    }
+
+    private void initPlayerLabels()
+    {
+        playerRockLabel = new Label();
+        playerRockLabel.setText(playerRockNr + "");
+        playerPaperLabel = new Label();
+        playerPaperLabel.setText(playerPaperNr + "");
+        playerScissorLabel = new Label();
+        playerScissorLabel.setText(playerScissorNr + "");
+
+        playerRockLabel.setLayoutX(PLAYER_LABEL_X + playerRockLabel.getLayoutBounds().getMinX());
+        playerRockLabel.setLayoutY(PLAYER_LABEL_Y);
+        playerRockLabel.setTextFill(Color.WHITE);
+        playerPaperLabel.setLayoutX((PLAYER_LABEL_X * 3 + 10) + playerPaperLabel.getLayoutBounds().getMinX());
+        playerPaperLabel.setLayoutY(PLAYER_LABEL_Y);
+        playerPaperLabel.setTextFill(Color.WHITE);
+        playerScissorLabel.setLayoutX((PLAYER_LABEL_X* 5 + 20) + playerScissorLabel.getLayoutBounds().getMinX());
+        playerScissorLabel.setLayoutY(PLAYER_LABEL_Y);
+        playerScissorLabel.setTextFill(Color.WHITE);
+
+        playerLivesLabel = new Label();
+        playerLivesLabel.setText("Player: "+playerLives);
+        playerLivesLabel.setTextFill(Color.WHITE);
+
+        playerLivesLabel.setLayoutX(200 - playerLivesLabel.getLayoutBounds().getWidth() / 2);
+        playerLivesLabel.setLayoutY(400);
+
+    }
+
+    private void initComputerLabels()
+    {
+        computerRockLabel = new Label();
+        computerRockLabel.setText(computerRockNr + "");
+        computerPaperLabel = new Label();
+        computerPaperLabel.setText(computerPaperNr + "");
+        computerScissorLabel = new Label();
+        computerScissorLabel.setText(computerScissorNr + "");
+
+        computerRockLabel.setLayoutX(COMPUTER_LABEL_X + computerRockLabel.getLayoutBounds().getMinX());
+        computerRockLabel.setLayoutY(COMPUTER_LABEL_Y);
+        computerRockLabel.setTextFill(Color.WHITE);
+        computerPaperLabel.setLayoutX((COMPUTER_LABEL_X * 3 + 10) + computerPaperLabel.getLayoutBounds().getMinX());
+        computerPaperLabel.setLayoutY(COMPUTER_LABEL_Y);
+        computerPaperLabel.setTextFill(Color.WHITE);
+        computerScissorLabel.setLayoutX((COMPUTER_LABEL_X * 5 + 20) + computerScissorLabel.getLayoutBounds().getMinX());
+        computerScissorLabel.setLayoutY(COMPUTER_LABEL_Y);
+        computerScissorLabel.setTextFill(Color.WHITE);
+
+        computerLivesLabel = new Label();
+        computerLivesLabel.setText("Computer: "+computerLives);
+        computerLivesLabel.setTextFill(Color.WHITE);
+
+        computerLivesLabel.setLayoutX(400 - computerLivesLabel.getLayoutBounds().getWidth() / 2);
+        computerLivesLabel.setLayoutY(400);
     }
 
     private ArrayList<Card> createCards() throws IOException
@@ -360,13 +378,13 @@ public class Game
             gameInProgress = false;
         }
 
-        playerRock.setText(playerRockNr + "");
-        playerPaper.setText(playerPaperNr + "");
-        playerScissor.setText(playerScissorNr + "");
+        playerRockLabel.setText(playerRockNr + "");
+        playerPaperLabel.setText(playerPaperNr + "");
+        playerScissorLabel.setText(playerScissorNr + "");
 
-        computerRock.setText(computerRockNr + "");
-        computerPaper.setText(computerPaperNr + "");
-        computerScissor.setText(computerScissorNr + "");
+        computerRockLabel.setText(computerRockNr + "");
+        computerPaperLabel.setText(computerPaperNr + "");
+        computerScissorLabel.setText(computerScissorNr + "");
 
         playerLivesLabel.setText("Player: "+playerLives);
         computerLivesLabel.setText("Computer: "+computerLives);
